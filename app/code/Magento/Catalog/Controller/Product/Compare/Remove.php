@@ -18,7 +18,7 @@ class Remove extends \Magento\Catalog\Controller\Product\Compare
     public function execute()
     {
         $productId = (int)$this->getRequest()->getParam('product');
-        if ($this->isActionAllowed() && $productId) {
+        if ($productId) {
             $storeId = $this->_storeManager->getStore()->getId();
             try {
                 $product = $this->productRepository->getById($productId, false, $storeId);
@@ -60,13 +60,5 @@ class Remove extends \Magento\Catalog\Controller\Product\Compare
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setRefererOrBaseUrl();
         }
-    }
-
-    /**
-     * @return bool
-     */
-    private function isActionAllowed(): bool
-    {
-        return $this->getRequest()->isPost() && $this->_formKeyValidator->validate($this->getRequest());
     }
 }

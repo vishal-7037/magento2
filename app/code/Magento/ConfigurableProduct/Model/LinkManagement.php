@@ -1,5 +1,6 @@
 <?php
 /**
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,11 +10,6 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 
-/**
- * Configurable product link management.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementInterface
 {
     /**
@@ -71,7 +67,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getChildren($sku)
     {
@@ -110,15 +106,11 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     }
 
     /**
-     * @inheritdoc
-     * @throws InputException
-     * @throws NoSuchEntityException
-     * @throws StateException
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * {@inheritdoc}
      */
     public function addChild($sku, $childSku)
     {
-        $product = $this->productRepository->get($sku, true);
+        $product = $this->productRepository->get($sku);
         $child = $this->productRepository->get($childSku);
 
         $childrenIds = array_values($this->configurableType->getChildrenIds($product->getId())[0]);
@@ -152,11 +144,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     }
 
     /**
-     * @inheritdoc
-     * @throws InputException
-     * @throws NoSuchEntityException
-     * @throws StateException
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * {@inheritdoc}
      */
     public function removeChild($sku, $childSku)
     {

@@ -30,13 +30,6 @@
     });
 </script>
 
-<?php
-$defaultMinSaleQty = $block->getDefaultConfigValue('min_sale_qty');
-if (!is_numeric($defaultMinSaleQty)) {
-    $defaultMinSaleQty = json_decode($defaultMinSaleQty, true);
-    $defaultMinSaleQty = (float) $defaultMinSaleQty[\Magento\Customer\Api\Data\GroupInterface::CUST_GROUP_ALL] ?? 1;
-}
-?>
 <div class="fieldset-wrapper form-inline advanced-inventory-edit">
     <div class="fieldset-wrapper-title">
         <strong class="title">
@@ -139,7 +132,7 @@ if (!is_numeric($defaultMinSaleQty)) {
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_min_sale_qty"
                                name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[min_sale_qty]"
-                               value="<?= /* @escapeNotVerified */ $defaultMinSaleQty ?>"
+                               value="<?= /* @escapeNotVerified */ $block->getDefaultConfigValue('min_sale_qty') * 1 ?>"
                                disabled="disabled"/>
                     </div>
                     <div class="field choice">

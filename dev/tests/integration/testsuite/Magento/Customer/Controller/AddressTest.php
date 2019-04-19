@@ -9,7 +9,6 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Request\Http as HttpRequest;
 
 class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
 {
@@ -19,9 +18,6 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     /** @var FormKey */
     private $formKey;
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -169,7 +165,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testDeleteAction()
     {
         $this->getRequest()->setParam('id', 1);
-        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey())->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
         // we are overwriting the address coming from the fixture
         $this->dispatch('customer/address/delete');
 
@@ -187,13 +183,13 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testWrongAddressDeleteAction()
     {
         $this->getRequest()->setParam('id', 555);
-        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey())->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
         // we are overwriting the address coming from the fixture
         $this->dispatch('customer/address/delete');
 
         $this->assertRedirect($this->stringContains('customer/address/index'));
         $this->assertSessionMessages(
-            $this->equalTo(['We can&#039;t delete the address right now.']),
+            $this->equalTo(['We can\'t delete the address right now.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

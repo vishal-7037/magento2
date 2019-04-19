@@ -13,8 +13,6 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Model\Quote;
 
 /**
- * Guest payment information management model.
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPaymentInformationManagementInterface
@@ -67,7 +65,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
-     * @param ResourceConnection $connectionPool
+     * @param ResourceConnection|null
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -89,7 +87,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function savePaymentInformationAndPlaceOrder(
         $cartId,
@@ -130,7 +128,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function savePaymentInformation(
         $cartId,
@@ -157,7 +155,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function getPaymentInformation($cartId)
     {
@@ -191,8 +189,9 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     {
         $shippingAddress = $quote->getShippingAddress();
         if ($shippingAddress && $shippingAddress->getShippingMethod()) {
-            $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
-            $shippingAddress->setLimitCarrier($shippingRate->getCarrier());
+            $shippingDataArray = explode('_', $shippingAddress->getShippingMethod());
+            $shippingCarrier = array_shift($shippingDataArray);
+            $shippingAddress->setLimitCarrier($shippingCarrier);
         }
     }
 }

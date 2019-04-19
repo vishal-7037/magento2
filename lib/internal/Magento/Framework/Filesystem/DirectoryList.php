@@ -8,7 +8,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Filesystem;
 
 /**
@@ -97,8 +96,7 @@ class DirectoryList
         static::validate($config);
         $this->root = $this->normalizePath($root);
         $this->directories = static::getDefaultConfig();
-        $sysTmpPath = get_cfg_var('upload_tmp_dir') ?: sys_get_temp_dir();
-        $this->directories[self::SYS_TMP] = [self::PATH => realpath($sysTmpPath)];
+        $this->directories[self::SYS_TMP] = [self::PATH => realpath(sys_get_temp_dir())];
 
         // inject custom values from constructor
         foreach ($this->directories as $code => $dir) {

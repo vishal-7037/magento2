@@ -57,24 +57,18 @@ class InstallData implements InstallDataInterface
             'color'
         ];
         foreach ($attributes as $attributeCode) {
-            if ($attribute = $eavSetup->getAttribute(
-                \Magento\Catalog\Model\Product::ENTITY,
-                $attributeCode,
-                'apply_to'
-            )) {
-                $relatedProductTypes = explode(
-                    ',',
-                    $attribute
+            $relatedProductTypes = explode(
+                ',',
+                $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, 'apply_to')
+            );
+            if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
+                $relatedProductTypes[] = Configurable::TYPE_CODE;
+                $eavSetup->updateAttribute(
+                    \Magento\Catalog\Model\Product::ENTITY,
+                    $attributeCode,
+                    'apply_to',
+                    implode(',', $relatedProductTypes)
                 );
-                if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
-                    $relatedProductTypes[] = Configurable::TYPE_CODE;
-                    $eavSetup->updateAttribute(
-                        \Magento\Catalog\Model\Product::ENTITY,
-                        $attributeCode,
-                        'apply_to',
-                        implode(',', $relatedProductTypes)
-                    );
-                }
             }
         }
     }

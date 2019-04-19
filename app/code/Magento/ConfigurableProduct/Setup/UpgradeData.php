@@ -47,18 +47,16 @@ class UpgradeData implements UpgradeDataInterface
 
         if (version_compare($context->getVersion(), '2.2.0') < 0) {
             $relatedProductTypes = $this->getRelatedProductTypes('tier_price', $eavSetup);
-            if (!empty($relatedProductTypes)) {
-                $key = array_search(Configurable::TYPE_CODE, $relatedProductTypes);
-                if ($key !== false) {
-                    unset($relatedProductTypes[$key]);
-                    $this->updateRelatedProductTypes('tier_price', $relatedProductTypes, $eavSetup);
-                }
+            $key = array_search(Configurable::TYPE_CODE, $relatedProductTypes);
+            if ($key !== false) {
+                unset($relatedProductTypes[$key]);
+                $this->updateRelatedProductTypes('tier_price', $relatedProductTypes, $eavSetup);
             }
         }
 
         if (version_compare($context->getVersion(), '2.2.1') < 0) {
             $relatedProductTypes = $this->getRelatedProductTypes('manufacturer', $eavSetup);
-            if (!empty($relatedProductTypes) && !in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
+            if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
                 $relatedProductTypes[] = Configurable::TYPE_CODE;
                 $this->updateRelatedProductTypes('manufacturer', $relatedProductTypes, $eavSetup);
             }
@@ -80,17 +78,10 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function getRelatedProductTypes(string $attributeId, EavSetup $eavSetup)
     {
-        if ($attribute = $eavSetup->getAttribute(
-            Product::ENTITY,
-            $attributeId,
-            'apply_to'
-        )) {
-            return explode(
-                ',',
-                $attribute
-            );
-        }
-        return [];
+        return explode(
+            ',',
+            $eavSetup->getAttribute(Product::ENTITY, $attributeId, 'apply_to')
+        );
     }
 
     /**
@@ -118,10 +109,8 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function upgradeQuoteItemPrice(ModuleDataSetupInterface $setup)
     {
-        $connectionName = 'checkout';
-        $connection = $setup->getConnection($connectionName);
-        $quoteItemTable = $setup->getTable('quote_item', $connectionName);
-
+        $connection = $setup->getConnection();
+        $quoteItemTable = $setup->getTable('quote_item');
         $select = $connection->select();
         $select->joinLeft(
             ['qi2' => $quoteItemTable],
@@ -132,10 +121,10 @@ class UpgradeData implements UpgradeDataInterface
             . ' AND qi1.parent_item_id IS NOT NULL'
             . ' AND qi2.product_type = "' . Configurable::TYPE_CODE . '"'
         );
-        $updateQuoteItem = $connection->updateFromSelect(
+        $updateQuoteItem = $setup->getConnection()->updateFromSelect(
             $select,
             ['qi1' => $quoteItemTable]
         );
-        $connection->query($updateQuoteItem);
+        $setup->getConnection()->query($updateQuoteItem);
     }
 }

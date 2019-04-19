@@ -6,12 +6,7 @@
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
 
 use Magento\Eav\Model\Entity\Attribute\Group;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group as ResourceGroup;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Filter\Translit;
-use Magento\Framework\Model\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class GroupTest extends \PHPUnit\Framework\TestCase
 {
@@ -21,38 +16,34 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ResourceGroup|MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $resourceMock;
 
     /**
-     * @var ManagerInterface|MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $eventManagerMock;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp()
     {
-        $this->resourceMock = $this->createMock(ResourceGroup::class);
-        $translitFilter = $this->getMockBuilder(Translit::class)
+        $this->resourceMock = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Group::class);
+        $translitFilter = $this->getMockBuilder(\Magento\Framework\Filter\Translit::class)
             ->disableOriginalConstructor()
             ->getMock();
         $translitFilter->expects($this->atLeastOnce())->method('filter')->willReturnArgument(0);
 
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
-        $contextMock = $this->createMock(Context::class);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventManagerMock);
         $constructorArguments = [
             'resource' => $this->resourceMock,
             'translitFilter' => $translitFilter,
             'context' => $contextMock,
-            'reservedSystemNames' => ['configurable'],
         ];
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            Group::class,
+            \Magento\Eav\Model\Entity\Attribute\Group::class,
             $constructorArguments
         );
     }
@@ -76,8 +67,6 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['General Group', 'general-group'],
-            ['configurable', md5('configurable')],
-            ['configurAble', md5('configurable')],
             ['///', md5('///')],
         ];
     }

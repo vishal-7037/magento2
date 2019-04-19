@@ -16,7 +16,7 @@ class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
     public function execute()
     {
         $widgetInstance = $this->_initWidgetInstance();
-        if (!$this->getRequest()->isPost() || !$widgetInstance) {
+        if (!$widgetInstance) {
             $this->_redirect('adminhtml/*/');
             return;
         }

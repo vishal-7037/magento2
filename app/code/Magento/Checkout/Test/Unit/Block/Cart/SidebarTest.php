@@ -6,8 +6,6 @@
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
 /**
- * Unit tests for Magento\Checkout\Block\Cart\Sidebar.
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SidebarTest extends \PHPUnit\Framework\TestCase
@@ -125,11 +123,6 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($totalsHtml, $this->model->getTotalsHtml());
     }
 
-    /**
-     * Unit test for getConfig method.
-     *
-     * @return void
-     */
     public function testGetConfig()
     {
         $websiteId = 100;
@@ -151,15 +144,14 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             'baseUrl' => $baseUrl,
             'minicartMaxItemsVisible' => 3,
             'websiteId' => 100,
-            'maxItemsToDisplay' => 8,
-            'storeId' => null,
+            'maxItemsToDisplay' => 8
         ];
 
         $valueMap = [
             ['checkout/cart', [], $shoppingCartUrl],
             ['checkout', [], $checkoutUrl],
             ['checkout/sidebar/updateItemQty', ['_secure' => false], $updateItemQtyUrl],
-            ['checkout/sidebar/removeItem', ['_secure' => false], $removeItemUrl],
+            ['checkout/sidebar/removeItem', ['_secure' => false], $removeItemUrl]
         ];
 
         $this->requestMock->expects($this->any())
@@ -169,7 +161,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilderMock->expects($this->exactly(4))
             ->method('getUrl')
             ->willReturnMap($valueMap);
-        $this->storeManagerMock->expects($this->atLeastOnce())->method('getStore')->willReturn($storeMock);
+        $this->storeManagerMock->expects($this->exactly(2))->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
         $this->imageHelper->expects($this->once())->method('getFrame')->willReturn(false);
 

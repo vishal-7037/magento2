@@ -286,8 +286,7 @@ abstract class Form
     }
 
     /**
-     * Return entity type instance.
-     *
+     * Return entity type instance
      * Return EAV entity type if entity type is not defined
      *
      * @return \Magento\Eav\Model\Entity\Type
@@ -324,8 +323,6 @@ abstract class Form
         if ($this->_attributes === null) {
             $this->_attributes = [];
             $this->_userAttributes = [];
-            $this->_systemAttributes = [];
-            $this->_allowedAttributes = [];
             /** @var $attribute \Magento\Eav\Model\Attribute */
             foreach ($this->_getFilteredFormAttributeCollection() as $attribute) {
                 $this->_attributes[$attribute->getAttributeCode()] = $attribute;

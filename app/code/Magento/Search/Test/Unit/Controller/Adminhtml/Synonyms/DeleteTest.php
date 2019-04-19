@@ -55,9 +55,8 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             false,
             true,
             true,
-            ['getParam', 'isPost']
+            ['getParam']
         );
-        $this->requestMock->expects($this->any())->method('isPost')->willReturn(true);
 
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
             ->disableOriginalConstructor()

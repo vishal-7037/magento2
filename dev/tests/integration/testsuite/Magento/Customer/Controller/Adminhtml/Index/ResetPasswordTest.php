@@ -5,8 +5,6 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\Framework\App\Request\Http as HttpRequest;
-
 /**
  * ResetPassword controller test.
  *
@@ -34,7 +32,7 @@ class ResetPasswordTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         $this->passwordResetRequestEventCreate(
             \Magento\Security\Model\PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST
         );
-        $this->getRequest()->setPostValue(['customer_id' => '1'])->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['customer_id' => '1']);
         $this->dispatch('backend/customer/index/resetPassword');
         $this->assertSessionMessages(
             $this->equalTo(['The customer will receive an email with a link to reset password.']),
@@ -57,7 +55,7 @@ class ResetPasswordTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         $this->passwordResetRequestEventCreate(
             \Magento\Security\Model\PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST
         );
-        $this->getRequest()->setPostValue(['customer_id' => '1'])->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['customer_id' => '1']);
         $this->dispatch('backend/customer/index/resetPassword');
         $this->assertSessionMessages(
             $this->equalTo(['The customer will receive an email with a link to reset password.']),
@@ -80,7 +78,7 @@ class ResetPasswordTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         $this->passwordResetRequestEventCreate(
             \Magento\Security\Model\PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST
         );
-        $this->getRequest()->setPostValue(['customer_id' => '1'])->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['customer_id' => '1']);
         $this->dispatch('backend/customer/index/resetPassword');
         $this->assertSessionMessages(
             $this->equalTo(['The customer will receive an email with a link to reset password.']),
@@ -105,7 +103,7 @@ class ResetPasswordTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         $this->passwordResetRequestEventCreate(
             \Magento\Security\Model\PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST
         );
-        $this->getRequest()->setPostValue(['customer_id' => '1'])->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['customer_id' => '1']);
         $this->dispatch('backend/customer/index/resetPassword');
         $this->assertSessionMessages(
             $this->equalTo(['The customer will receive an email with a link to reset password.']),

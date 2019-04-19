@@ -6,12 +6,11 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Newsletter\Controller\Adminhtml\Subscriber;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Framework\App\ObjectManager;
 
 class MassDelete extends Subscriber
 {
@@ -37,17 +36,12 @@ class MassDelete extends Subscriber
      * Delete one or more subscribers action
      *
      * @return void
-     * @throws NotFoundException
      */
     public function execute()
     {
-        if (!$this->getRequest()->isPost()) {
-            throw new NotFoundException(__('Page not found.'));
-        }
-
         $subscribersIds = $this->getRequest()->getParam('subscriber');
         if (!is_array($subscribersIds)) {
-            $this->messageManager->addErrorMessage(__('Please select one or more subscribers.'));
+            $this->messageManager->addError(__('Please select one or more subscribers.'));
         } else {
             try {
                 foreach ($subscribersIds as $subscriberId) {
@@ -56,11 +50,9 @@ class MassDelete extends Subscriber
                     );
                     $subscriber->delete();
                 }
-                $this->messageManager->addSuccessMessage(
-                    __('Total of %1 record(s) were deleted.', count($subscribersIds))
-                );
+                $this->messageManager->addSuccess(__('Total of %1 record(s) were deleted.', count($subscribersIds)));
             } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             }
         }
 

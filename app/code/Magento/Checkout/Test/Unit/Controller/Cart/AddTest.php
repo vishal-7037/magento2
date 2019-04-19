@@ -58,10 +58,7 @@ class AddTest extends \PHPUnit\Framework\TestCase
         $this->resultRedirectFactory = $this->getMockBuilder(RedirectFactory::class)
                 ->disableOriginalConstructor()->getMock();
         $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isPost'])
-            ->getMockForAbstractClass();
-        $this->request->expects($this->any())->method('isPost')->willReturn(true);
+            ->disableOriginalConstructor()->getmock();
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()->getMock();
 

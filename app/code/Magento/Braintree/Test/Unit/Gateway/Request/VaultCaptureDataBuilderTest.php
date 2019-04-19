@@ -111,7 +111,7 @@ class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
      * @expectedException \Magento\Payment\Gateway\Command\CommandException
      * @expectedExceptionMessage The Payment Token is not available to perform the request.
      */
-    public function testBuildWithoutPaymentToken()
+    public function testBuildWithoutPaymentToken(): void
     {
         $amount = 30.00;
         $buildSubject = [

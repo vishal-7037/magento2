@@ -18,7 +18,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        if (!$this->isActionAllowed()) {
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
             return $resultRedirect->setRefererUrl();
         }
 
@@ -50,13 +50,5 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
             $this->_objectManager->get(\Magento\Catalog\Helper\Product\Compare::class)->calculate();
         }
         return $resultRedirect->setRefererOrBaseUrl();
-    }
-
-    /**
-     * @return bool
-     */
-    private function isActionAllowed(): bool
-    {
-        return $this->getRequest()->isPost() && $this->_formKeyValidator->validate($this->getRequest());
     }
 }

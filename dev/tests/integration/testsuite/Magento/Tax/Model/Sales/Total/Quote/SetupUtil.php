@@ -9,19 +9,10 @@
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Quote\Model\Quote;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\Calculation;
-use Magento\Quote\Model\Quote\Item\Updater;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Api\Filter;
-use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
- * Setup utility for quote
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SetupUtil
@@ -602,7 +593,7 @@ class SetupUtil
      *
      * @param array $quoteData
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
-     * @return Quote
+     * @return \Magento\Quote\Model\Quote
      */
     protected function createQuote($quoteData, $customer)
     {
@@ -627,8 +618,8 @@ class SetupUtil
         $quoteBillingAddress = $this->objectManager->create(\Magento\Quote\Model\Quote\Address::class);
         $quoteBillingAddress->importCustomerAddressData($addressService->getById($billingAddress->getId()));
 
-        /** @var Quote $quote */
-        $quote = $this->objectManager->create(Quote::class);
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->setStoreId(1)
             ->setIsActive(true)
             ->setIsMultiShipping(false)
@@ -642,7 +633,7 @@ class SetupUtil
     /**
      * Add products to quote
      *
-     * @param Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @param array $itemsData
      * @return $this
      */
@@ -665,8 +656,7 @@ class SetupUtil
      * Create a quote based on given data
      *
      * @param array $quoteData
-     *
-     * @return Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function setupQuote($quoteData)
     {
@@ -675,9 +665,7 @@ class SetupUtil
         $quote = $this->createQuote($quoteData, $customer);
 
         $this->addProductToQuote($quote, $quoteData['items']);
-        if (isset($quoteData['update_items'])) {
-            $this->updateItems($quote, $quoteData['update_items']);
-        }
+
         //Set shipping amount
         if (isset($quoteData['shipping_method'])) {
             $quote->getShippingAddress()->setShippingMethod($quoteData['shipping_method']);
@@ -693,34 +681,5 @@ class SetupUtil
         }
 
         return $quote;
-    }
-
-    /**
-     * Update quote items
-     *
-     * @param Quote $quote
-     * @param array $items
-     *
-     * @return void
-     */
-    private function updateItems(Quote $quote, array $items)
-    {
-        $updater = $this->objectManager->get(Updater::class);
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $filter = $this->objectManager->create(Filter::class);
-        $filter->setField('sku')->setValue(array_keys($items));
-        $filterGroup = $this->objectManager->create(FilterGroup::class);
-        $filterGroup->setFilters([$filter]);
-        $searchCriteria = $this->objectManager->create(SearchCriteriaInterface::class);
-        $searchCriteria->setFilterGroups([$filterGroup]);
-        $products = $productRepository->getList($searchCriteria)->getItems();
-        /** @var ProductInterface $product */
-        foreach ($products as $product) {
-            $quoteItem = $quote->getItemByProduct($product);
-            $updater->update(
-                $quoteItem,
-                $items[$product->getSku()]
-            );
-        }
     }
 }

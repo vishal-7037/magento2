@@ -23,7 +23,7 @@ class RegionTest extends \PHPUnit\Framework\TestCase
         $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $elementMock = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
-            ['getForm', 'getHtmlAttributes', 'getHtmlId', 'getName']
+            ['getForm', 'getHtmlAttributes']
         );
         $countryMock = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,

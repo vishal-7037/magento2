@@ -25,7 +25,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class QuoteManagement
  *
- * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -356,13 +355,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         if ($quote->getCheckoutMethod() === self::METHOD_GUEST) {
             $quote->setCustomerId(null);
             $quote->setCustomerEmail($quote->getBillingAddress()->getEmail());
-            if ($quote->getCustomerFirstname() === null && $quote->getCustomerLastname() === null) {
-                $quote->setCustomerFirstname($quote->getBillingAddress()->getFirstname());
-                $quote->setCustomerLastname($quote->getBillingAddress()->getLastname());
-                if ($quote->getCustomerMiddlename() === null) {
-                    $quote->setCustomerMiddlename($quote->getBillingAddress()->getMiddlename());
-                }
-            }
             $quote->setCustomerIsGuest(true);
             $quote->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID);
         }
@@ -529,7 +521,19 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             );
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            $this->rollbackAddresses($quote, $order, $e);
+            if (!empty($this->addressesToSync)) {
+                foreach ($this->addressesToSync as $addressId) {
+                    $this->addressRepository->deleteById($addressId);
+                }
+            }
+            $this->eventManager->dispatch(
+                'sales_model_service_quote_submit_failure',
+                [
+                    'order'     => $order,
+                    'quote'     => $quote,
+                    'exception' => $e
+                ]
+            );
             throw $e;
         }
         return $order;
@@ -594,44 +598,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         }
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
             $shipping->setIsDefaultBilling(true);
-        }
-    }
-
-    /**
-     * Remove related to order and quote addresses and submit exception to further processing.
-     *
-     * @param Quote $quote
-     * @param \Magento\Sales\Api\Data\OrderInterface $order
-     * @param \Exception $e
-     * @throws \Exception
-     * @return void
-     */
-    private function rollbackAddresses(
-        QuoteEntity $quote,
-        \Magento\Sales\Api\Data\OrderInterface $order,
-        \Exception $e
-    ) {
-        try {
-            if (!empty($this->addressesToSync)) {
-                foreach ($this->addressesToSync as $addressId) {
-                    $this->addressRepository->deleteById($addressId);
-                }
-            }
-            $this->eventManager->dispatch(
-                'sales_model_service_quote_submit_failure',
-                [
-                    'order' => $order,
-                    'quote' => $quote,
-                    'exception' => $e,
-                ]
-            );
-        } catch (\Exception $consecutiveException) {
-            $message = sprintf(
-                "An exception occurred on 'sales_model_service_quote_submit_failure' event: %s",
-                $consecutiveException->getMessage()
-            );
-
-            throw new \Exception($message, 0, $e);
         }
     }
 }

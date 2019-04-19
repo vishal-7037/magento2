@@ -56,7 +56,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             false,
             true,
             true,
-            ['getParam', 'isPost']
+            ['getParam']
         );
 
         $this->pageMock = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
@@ -94,8 +94,6 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->any())
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactoryMock);
-
-        $this->requestMock->expects($this->any())->method('isPost')->willReturn(true);
 
         $this->deleteController = $this->objectManager->getObject(
             \Magento\Cms\Controller\Adminhtml\Page\Delete::class,

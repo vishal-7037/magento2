@@ -50,19 +50,6 @@ class Date extends AbstractElement
     }
 
     /**
-     * Check if a string is a date value
-     *
-     * @param string $value
-     * @return bool
-     */
-    private function isDate(string $value): bool
-    {
-        $date = date_parse($value);
-
-        return !empty($date['year']) && !empty($date['month']) && !empty($date['day']);
-    }
-
-    /**
      * If script executes on x64 system, converts large
      * numeric values to timestamp limit
      *
@@ -98,10 +85,9 @@ class Date extends AbstractElement
         try {
             if (preg_match('/^[0-9]+$/', $value)) {
                 $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
-            } else if (is_string($value) && $this->isDate($value)) {
-                $this->_value = new \DateTime($value, new \DateTimeZone($this->localeDate->getConfigTimezone()));
             } else {
-                $this->_value = '';
+                $this->_value = new \DateTime($value);
+                $this->_value->setTimezone(new \DateTimeZone($this->localeDate->getConfigTimezone()));
             }
         } catch (\Exception $e) {
             $this->_value = '';

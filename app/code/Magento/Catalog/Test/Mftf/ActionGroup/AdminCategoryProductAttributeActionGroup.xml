@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <!--Action to delete product attribute-->
     <actionGroup name="DeleteProductAttribute">
         <arguments>
@@ -15,16 +15,15 @@
         </arguments>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributesGridPage"/>
         <waitForPageLoad time="30" stepKey="waitForProductAttributesGridPageLoad"/>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFiltersBeforeDelete"/>
+        <click selector="{{AdminProductAttributeGridSection.resetFilter}}" stepKey="resetFilter"/>
         <fillField selector="{{AdminProductAttributeGridSection.gridFilterFrontEndLabel}}"
                    userInput="{{productAttribute.default_label}}" stepKey="fillAttributeDefaultLabelInput"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="applyFilters"/>
+        <click selector="{{AdminProductAttributeGridSection.search}}" stepKey="searchForAttribute"/>
         <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="clickFirstRow"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
-        <click selector="{{AdminMainActionsSection.delete}}" stepKey="deleteProductAttribute"/>
+        <click selector="{{AdminProductAttributeEditSection.deleteAttribute}}" stepKey="deleteProductAttribute"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitingForWarningModal"/>
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the product attribute." stepKey="seeSuccessMessage"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreDelete"/>
     </actionGroup>
 
     <actionGroup name="navigateToProductAttribute">

@@ -89,23 +89,10 @@ class Message implements MailMessageInterface
 
     /**
      * @inheritdoc
-     *
-     * @deprecated This function is missing the from name. The
-     * setFromAddress() function sets both from address and from name.
-     * @see setFromAddress()
      */
     public function setFrom($fromAddress)
     {
-        $this->setFromAddress($fromAddress, null);
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setFromAddress($fromAddress, $fromName = null)
-    {
-        $this->zendMessage->setFrom($fromAddress, $fromName);
+        $this->zendMessage->setFrom($fromAddress);
         return $this;
     }
 

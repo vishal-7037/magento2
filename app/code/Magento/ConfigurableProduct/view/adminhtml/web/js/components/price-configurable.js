@@ -11,6 +11,9 @@ define([
 
     return Abstract.extend({
         defaults: {
+            listens: {
+                isConfigurable: 'handlePriceValue'
+            },
             imports: {
                 isConfigurable: '!ns = ${ $.ns }, index = configurable-matrix:isEmpty'
             },
@@ -19,15 +22,12 @@ define([
             }
         },
 
-        /** @inheritdoc */
+        /**
+         * Invokes initialize method of parent class,
+         * contains initialization logic
+         */
         initialize: function () {
             this._super();
-            // resolve initial disable state
-            this.handlePriceValue(this.isConfigurable);
-            // add listener to track "configurable" type
-            this.setListeners({
-                isConfigurable: 'handlePriceValue'
-            });
 
             return this;
         },
@@ -50,10 +50,11 @@ define([
          * @param {String} isConfigurable
          */
         handlePriceValue: function (isConfigurable) {
-            this.disabled(!!this.isUseDefault() || isConfigurable);
-
             if (isConfigurable) {
+                this.disable();
                 this.clear();
+            } else {
+                this.enable();
             }
         }
     });

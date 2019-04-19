@@ -8,11 +8,6 @@ namespace Magento\Framework\Data\Test\Unit\Form\Element;
 class MultiselectTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $escaperMock;
-
-    /**
      * @var \Magento\Framework\Data\Form\Element\Multiselect
      */
     protected $_model;
@@ -20,12 +15,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
-        $this->escaperMock->method('escapeHtml')->willReturnArgument(0);
-        $this->_model = $testHelper->getObject(
-            \Magento\Framework\Data\Form\Element\Editablemultiselect::class,
-            ['escaper' => $this->escaperMock]
-        );
+        $this->_model = $testHelper->getObject(\Magento\Framework\Data\Form\Element\Editablemultiselect::class);
         $this->_model->setForm(new \Magento\Framework\DataObject());
     }
 

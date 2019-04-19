@@ -396,10 +396,7 @@ define([
                     select = $widget._RenderSwatchSelect(item, chooseText),
                     input = $widget._RenderFormInput(item),
                     listLabel = '',
-                    firstSpan = '',
-                    div = '',
-                    subDiv = '',
-                    secondSpan = '';
+                    label = '';
 
                 // Show only swatch controls
                 if ($widget.options.onlySwatches && !$widget.options.jsonSwatchConfig.hasOwnProperty(item.id)) {
@@ -407,48 +404,37 @@ define([
                 }
 
                 if ($widget.options.enableControlLabel) {
-                    firstSpan = document.createElement('span');
-                    secondSpan = document.createElement('span');
-                    firstSpan.setAttribute('id', controlLabelId);
-                    firstSpan.setAttribute('class', classes.attributeLabelClass);
-                    firstSpan.textContent = item.label;
-                    secondSpan.setAttribute('class', classes.attributeSelectedOptionLabelClass);
+                    label +=
+                        '<span id="' + controlLabelId + '" class="' + classes.attributeLabelClass + '">' +
+                            item.label +
+                        '</span>' +
+                        '<span class="' + classes.attributeSelectedOptionLabelClass + '"></span>';
                 }
 
                 if ($widget.inProductList) {
                     $widget.productForm.append(input);
                     input = '';
-                    listLabel = document.createAttribute('aria-label');
-                    listLabel.value = item.label;
+                    listLabel = 'aria-label="' + item.label + '"';
                 } else {
-                    listLabel = document.createAttribute('aria-labelledby');
-                    listLabel.value = controlLabelId;
+                    listLabel = 'aria-labelledby="' + controlLabelId + '"';
                 }
-
-                div = document.createElement('div');
-                subDiv = document.createElement('div');
-                div.setAttribute('class', classes.attributeClass + ' ' + item.code);
-                div.setAttribute('attribute-code', item.code);
-                div.setAttribute('attribute-id', item.id);
-                div.innerHTML = input;
-                subDiv.setAttribute('aria-activedescendant', '');
-                subDiv.setAttribute('tabindex', 0);
-                subDiv.setAttribute('aria-invalid', false);
-                subDiv.setAttribute('aria-required', true);
-                subDiv.setAttribute('role', 'listbox');
-                subDiv.setAttributeNode(listLabel);
-                subDiv.setAttribute('class', classes.attributeOptionsWrapper + ' clearfix');
-                subDiv.innerHTML = options + select;
-
-                if ($widget.options.enableControlLabel) {
-                    div.appendChild(firstSpan);
-                    div.appendChild(secondSpan);
-                }
-
-                div.appendChild(subDiv);
 
                 // Create new control
-                container.append(div.outerHTML);
+                container.append(
+                    '<div class="' + classes.attributeClass + ' ' + item.code + '" ' +
+                         'attribute-code="' + item.code + '" ' +
+                         'attribute-id="' + item.id + '">' +
+                        label +
+                        '<div aria-activedescendant="" ' +
+                             'tabindex="0" ' +
+                             'aria-invalid="false" ' +
+                             'aria-required="true" ' +
+                             'role="listbox" ' + listLabel +
+                             'class="' + classes.attributeOptionsWrapper + ' clearfix">' +
+                            options + select +
+                        '</div>' + input +
+                    '</div>'
+                );
 
                 $widget.optionsMap[item.id] = {};
 
@@ -507,7 +493,7 @@ define([
                 return '';
             }
 
-            $.each(config.options, function (index) {
+            $.each(config.options, function () {
                 var id,
                     type,
                     value,
@@ -515,8 +501,7 @@ define([
                     label,
                     width,
                     height,
-                    link,
-                    div;
+                    attr;
 
                 if (!optionConfig.hasOwnProperty(this.id)) {
                     return '';
@@ -524,12 +509,7 @@ define([
 
                 // Add more button
                 if (moreLimit === countAttributes++) {
-                    link = document.createElement('a');
-                    link.setAttribute('class', moreClass);
-                    link.setAttribute('href', '#');
-                    link.textContent = moreText;
-
-                    html += link.outerHTML;
+                    html += '<a href="#" class="' + moreClass + '">' + moreText + '</a>';
                 }
 
                 id = this.id;
@@ -539,55 +519,48 @@ define([
                 width = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.width : 110;
                 height = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.height : 90;
                 label = this.label ? this.label : '';
-
-                div = document.createElement('div');
-
-                div.setAttribute('id', controlId + '-item-' + id);
-                div.setAttribute('index', index);
-                div.setAttribute('aria-checked', false);
-                div.setAttribute('aria-describedby', controlId);
-                div.setAttribute('tabindex', 0);
-                div.setAttribute('option-type', type);
-                div.setAttribute('option-id', id);
-                div.setAttribute('option-label', label);
-                div.setAttribute('aria-label', label);
-                div.setAttribute('option-tooltip-thumb', thumb);
-                div.setAttribute('option-tooltip-value', value);
-                div.setAttribute('role', 'option');
-                div.setAttribute('thumb-width', width);
-                div.setAttribute('thumb-height', height);
+                attr =
+                    ' id="' + controlId + '-item-' + id + '"' +
+                    ' aria-checked="false"' +
+                    ' aria-describedby="' + controlId + '"' +
+                    ' tabindex="0"' +
+                    ' option-type="' + type + '"' +
+                    ' option-id="' + id + '"' +
+                    ' option-label="' + label + '"' +
+                    ' aria-label="' + label + '"' +
+                    ' option-tooltip-thumb="' + thumb + '"' +
+                    ' option-tooltip-value="' + value + '"' +
+                    ' role="option"' +
+                    ' thumb-width="' + width + '"' +
+                    ' thumb-height="' + height + '"';
 
                 if (!this.hasOwnProperty('products') || this.products.length <= 0) {
-                    div.setAttribute('option-empty', true);
+                    attr += ' option-empty="true"';
                 }
 
                 if (type === 0) {
                     // Text
-                    div.setAttribute('class', optionClass + ' text');
-                    div.textContent = value ? value : label;
+                    html += '<div class="' + optionClass + ' text" ' + attr + '>' + (value ? value : label) +
+                        '</div>';
                 } else if (type === 1) {
                     // Color
-                    div.setAttribute('class', optionClass + ' color');
-                    div.setAttribute('style', 'background: ' + value + ' no-repeat center; background-size: initial;');
-
+                    html += '<div class="' + optionClass + ' color" ' + attr +
+                        ' style="background: ' + value +
+                        ' no-repeat center; background-size: initial;">' + '' +
+                        '</div>';
                 } else if (type === 2) {
                     // Image
-                    div.setAttribute('class', optionClass + ' image');
-                    div.setAttribute('style',
-                        'background: url(' + value +
-                        ') no-repeat center;' +
-                        ' background-size: initial;' +
-                        ' width:' + sizeConfig.swatchImage.width + 'px;' +
-                        ' height:' + sizeConfig.swatchImage.height + 'px;');
+                    html += '<div class="' + optionClass + ' image" ' + attr +
+                        ' style="background: url(' + value + ') no-repeat center; background-size: initial;width:' +
+                        sizeConfig.swatchImage.width + 'px; height:' + sizeConfig.swatchImage.height + 'px">' + '' +
+                        '</div>';
                 } else if (type === 3) {
                     // Clear
-                    div.setAttribute('class', optionClass);
+                    html += '<div class="' + optionClass + '" ' + attr + '></div>';
                 } else {
                     // Default
-                    div.setAttribute('class', optionClass);
-                    div.textContent = label;
+                    html += '<div class="' + optionClass + '" ' + attr + '>' + label + '</div>';
                 }
-                html += div.outerHTML;
             });
 
             return html;
@@ -602,36 +575,30 @@ define([
          * @private
          */
         _RenderSwatchSelect: function (config, chooseText) {
-            var select,
-                firstOption,
-                otherOption;
+            var html;
 
             if (this.options.jsonSwatchConfig.hasOwnProperty(config.id)) {
                 return '';
             }
 
-            select = document.createElement('select');
-            $(select).attr('class', this.options.classes.selectClass);
-            firstOption = document.createElement('option');
-            $(firstOption).attr('value', 0);
-            $(firstOption).attr('option-id', 0);
-            $(firstOption).text(chooseText);
-            select.appendChild(firstOption);
+            html =
+                '<select class="' + this.options.classes.selectClass + ' ' + config.code + '">' +
+                '<option value="0" option-id="0">' + chooseText + '</option>';
 
             $.each(config.options, function () {
-                otherOption = document.createElement('option');
-                $(otherOption).attr('value', this.id);
-                $(otherOption).attr('option-id', this.id);
-                $(otherOption).text(this.label);
+                var label = this.label,
+                    attr = ' value="' + this.id + '" option-id="' + this.id + '"';
 
                 if (!this.hasOwnProperty('products') || this.products.length <= 0) {
-                    $(otherOption).attr('option-empty', true);
+                    attr += ' option-empty="true"';
                 }
 
-                select.appendChild(otherOption);
+                html += '<option ' + attr + '>' + label + '</option>';
             });
 
-            return select.outerHTML;
+            html += '</select>';
+
+            return html;
         },
 
         /**
@@ -778,12 +745,6 @@ define([
             ) {
                 $widget._UpdatePrice();
             }
-
-            $(document).trigger('updateMsrpPriceBlock',
-                [
-                    parseInt($this.attr('index'), 10) + 1,
-                    $widget.options.jsonConfig.optionPrices
-                ]);
 
             $widget._loadMedia(eventName);
             $input.trigger('change');
@@ -957,8 +918,7 @@ define([
                 $productPrice = $product.find(this.options.selectorProductPrice),
                 options = _.object(_.keys($widget.optionsMap), {}),
                 result,
-                tierPriceHtml,
-                isShow;
+                tierPriceHtml;
 
             $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
                 var attributeId = $(this).attr('attribute-id');
@@ -975,9 +935,11 @@ define([
                 }
             );
 
-            isShow = typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount;
-
-            $product.find(this.options.slyOldPriceSelector)[isShow ? 'show' : 'hide']();
+            if (typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount) {
+                $(this.options.slyOldPriceSelector).show();
+            } else {
+                $(this.options.slyOldPriceSelector).hide();
+            }
 
             if (typeof result != 'undefined' && result.tierPrices.length) {
                 if (this.options.tierPriceTemplate) {

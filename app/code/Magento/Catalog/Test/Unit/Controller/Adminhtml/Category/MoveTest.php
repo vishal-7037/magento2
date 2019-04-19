@@ -83,10 +83,9 @@ class MoveTest extends \PHPUnit\Framework\TestCase
     {
         $this->request = $this
             ->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
-            ->setMethods(['getPost', 'isPost'])
+            ->setMethods(['getPost'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->request->expects($this->any())->method('isPost')->willReturn(true);
         $this->context->expects($this->once())->method('getRequest')->will($this->returnValue($this->request));
         $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);

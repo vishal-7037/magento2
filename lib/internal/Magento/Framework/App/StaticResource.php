@@ -10,7 +10,6 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Debug;
 
 /**
  * Entry point for retrieving static resources like JS, CSS, images by requested public path
@@ -55,12 +54,12 @@ class StaticResource implements \Magento\Framework\AppInterface
     private $objectManager;
 
     /**
-     * @var ConfigLoaderInterface
+     * @var \Magento\Framework\ObjectManager\ConfigLoaderInterface
      */
     private $configLoader;
 
     /**
-     * @var Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     private $filesystem;
 
@@ -70,7 +69,7 @@ class StaticResource implements \Magento\Framework\AppInterface
     private $deploymentConfig;
 
     /**
-     * @var LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
@@ -139,7 +138,7 @@ class StaticResource implements \Magento\Framework\AppInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function catchException(Bootstrap $bootstrap, \Exception $exception)
     {
@@ -147,15 +146,7 @@ class StaticResource implements \Magento\Framework\AppInterface
         if ($bootstrap->isDeveloperMode()) {
             $this->response->setHttpResponseCode(404);
             $this->response->setHeader('Content-Type', 'text/plain');
-            $this->response->setBody(
-                $exception->getMessage() . "\n" .
-                Debug::trace(
-                    $exception->getTrace(),
-                    true,
-                    true,
-                    (bool)getenv('MAGE_DEBUG_SHOW_ARGS')
-                )
-            );
+            $this->response->setBody($exception->getMessage() . "\n" . $exception->getTraceAsString());
             $this->response->sendResponse();
         } else {
             require $this->getFilesystem()->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/404.php');

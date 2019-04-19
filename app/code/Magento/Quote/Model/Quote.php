@@ -1354,7 +1354,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * Retrieve quote items collection.
+     * Retrieve quote items collection
      *
      * @param bool $useCache
      * @return  \Magento\Eav\Model\Entity\Collection\AbstractCollection
@@ -1362,10 +1362,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getItemsCollection($useCache = true)
     {
-        if ($this->hasItemsCollection() && $useCache) {
+        if ($this->hasItemsCollection()) {
             return $this->getData('items_collection');
         }
-        if (null === $this->_items || !$useCache) {
+        if (null === $this->_items) {
             $this->_items = $this->_quoteItemCollectionFactory->create();
             $this->extensionAttributesJoinProcessor->process($this->_items);
             $this->_items->setQuote($this);

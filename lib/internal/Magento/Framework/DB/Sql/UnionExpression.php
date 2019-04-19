@@ -23,24 +23,17 @@ class UnionExpression extends Expression
     protected $type;
 
     /**
-     * @var string
-     */
-    private $pattern;
-
-    /**
      * @param Select[] $parts
-     * @param string $type (optional)
-     * @param string $pattern (optional)
+     * @param string $type
      */
-    public function __construct(array $parts, $type = Select::SQL_UNION, $pattern = '')
+    public function __construct(array $parts, $type = Select::SQL_UNION)
     {
         $this->parts = $parts;
         $this->type = $type;
-        $this->pattern = $pattern;
     }
 
     /**
-     * @inheritdoc
+     * @return string
      */
     public function __toString()
     {
@@ -52,11 +45,6 @@ class UnionExpression extends Expression
                 $parts[] = $part;
             }
         }
-        $sql = implode($parts, $this->type);
-        if ($this->pattern) {
-            return sprintf($this->pattern, $sql);
-        }
-
-        return $sql;
+        return implode($parts, $this->type);
     }
 }

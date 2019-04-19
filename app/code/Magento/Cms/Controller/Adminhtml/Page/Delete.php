@@ -1,5 +1,6 @@
 <?php
 /**
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -18,14 +19,9 @@ class Delete extends \Magento\Backend\App\Action
      * Delete action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function execute()
     {
-        if (!$this->getRequest()->isPost()) {
-            throw new \Magento\Framework\Exception\NotFoundException(__('Page not found.'));
-        }
-
         // check if we know what should be deleted
         $id = $this->getRequest()->getParam('page_id');
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

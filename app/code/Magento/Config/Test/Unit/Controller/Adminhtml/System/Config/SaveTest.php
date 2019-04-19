@@ -69,7 +69,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->_requestMock->expects($this->any())->method('isPost')->willReturn(true);
         $this->_responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
 
         $configStructureMock = $this->createMock(\Magento\Config\Model\Config\Structure::class);

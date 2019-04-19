@@ -8,11 +8,10 @@
           visible="visible"
           css="_required: required"
           attr="'data-index': index">
-    <div if="showLabel" class="admin__field-label">
-        <legend>
-            <span translate="label" attr="'data-config-scope': $data.scopeLabel"/>
-        </legend>
-    </div>
+    <legend class="admin__field-label" if="showLabel">
+        <span translate="label" attr="'data-config-scope': $data.scopeLabel"/>
+    </legend>
+
     <div class="admin__field-control" css="$data.additionalClasses">
         <each args="elems">
             <if args="visible()" if="!$data.additionalForGroup">

@@ -15,18 +15,6 @@ define([
     describe('Magento_Braintree/js/view/payment/method-renderer/cc-form', function () {
         var injector = new Squire(),
             mocks = {
-                'Magento_Checkout/js/model/checkout-data-resolver': {
-
-                    /** Stub */
-                    applyBillingAddress: function () {
-                        return true;
-                    },
-
-                    /** Stub */
-                    resolveBillingAddress: function () {
-                        return true;
-                    }
-                },
                 'Magento_Checkout/js/model/quote': {
                     billingAddress: ko.observable(),
                     shippingAddress: ko.observable(),

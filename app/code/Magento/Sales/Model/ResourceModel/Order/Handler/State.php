@@ -9,7 +9,7 @@ namespace Magento\Sales\Model\ResourceModel\Order\Handler;
 use Magento\Sales\Model\Order;
 
 /**
- * Class to check and adjust order state/status.
+ * Class to check order State.
  */
 class State
 {
@@ -31,10 +31,7 @@ class State
         }
 
         if (!$order->isCanceled() && !$order->canUnhold() && !$order->canInvoice()) {
-            if (in_array($currentState, [Order::STATE_PROCESSING, Order::STATE_COMPLETE])
-                && !$order->canCreditmemo()
-                && !$order->canShip()
-            ) {
+            if (in_array($currentState, [Order::STATE_PROCESSING, Order::STATE_COMPLETE]) && !$order->canCreditmemo()) {
                 $order->setState(Order::STATE_CLOSED)
                     ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_CLOSED));
             } elseif ($currentState === Order::STATE_PROCESSING && !$order->canShip()) {

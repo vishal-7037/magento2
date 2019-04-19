@@ -20,9 +20,6 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
      */
     protected $model;
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -42,9 +39,6 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         );
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function tearDown()
     {
         /**

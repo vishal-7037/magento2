@@ -22,7 +22,6 @@ use Magento\TestFramework\Request;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OrderItemCollection;
-use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -287,8 +286,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      * Gets \Magento\Quote\Model\Quote\Item from \Magento\Quote\Model\Quote by product id
      *
      * @param \Magento\Quote\Model\Quote $quote
-     * @param string|int $productId
-     *
+     * @param $productId
      * @return \Magento\Quote\Model\Quote\Item|null
      */
     private function _getQuoteItemIdByProductId($quote, $productId)
@@ -323,7 +321,6 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'isAjax' => 1
         ];
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
 
         $quote =  $this->_objectManager->create(\Magento\Checkout\Model\Cart::class);
@@ -370,7 +367,6 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         ];
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
         $this->getRequest()->setPostValue($postData);
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('checkout/cart/add');
 
@@ -406,7 +402,6 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         ];
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
         $this->getRequest()->setPostValue($postData);
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('checkout/cart/add');
 

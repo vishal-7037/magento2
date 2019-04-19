@@ -5,7 +5,6 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Controller\ResultFactory;
 
@@ -13,14 +12,9 @@ class MassDelete extends TermController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws NotFoundException
      */
     public function execute()
     {
-        if (!$this->getRequest()->isPost()) {
-            throw new NotFoundException(__('Page not found'));
-        }
-
         $searchIds = $this->getRequest()->getParam('search');
         if (!is_array($searchIds)) {
             $this->messageManager->addErrorMessage(__('Please select searches.'));

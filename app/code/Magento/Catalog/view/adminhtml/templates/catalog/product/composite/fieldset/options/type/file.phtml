@@ -64,10 +64,8 @@ require(['prototype'], function(){
 
 <div class="admin__field <?php if ($_option->getIsRequire()) echo ' required _required' ?>">
     <label class="admin__field-label label">
-        <span>
-            <?= $block->escapeHtml($_option->getTitle()) ?>
-            <?= /* @escapeNotVerified */ $block->getFormattedPrice() ?>
-        </span>
+        <?= $block->escapeHtml($_option->getTitle()) ?>
+        <?= /* @escapeNotVerified */ $block->getFormattedPrice() ?>
     </label>
     <div class="admin__field-control control">
         <?php if ($_fileExists): ?>

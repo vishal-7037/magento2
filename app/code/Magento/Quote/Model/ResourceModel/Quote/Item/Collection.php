@@ -325,10 +325,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     /**
      * Check is valid product.
      *
-     * @param ProductInterface|null $product
+     * @param ProductInterface $product
      * @return bool
      */
-    private function isValidProduct(ProductInterface $product = null): bool
+    private function isValidProduct(ProductInterface $product): bool
     {
         $result = ($product && (int)$product->getStatus() !== ProductStatus::STATUS_DISABLED);
 

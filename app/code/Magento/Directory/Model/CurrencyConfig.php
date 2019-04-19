@@ -57,7 +57,7 @@ class CurrencyConfig
      */
     public function getConfigCurrencies(string $path)
     {
-        $result = in_array($this->appState->getAreaCode(), [Area::AREA_ADMINHTML, Area::AREA_CRONTAB])
+        $result = $this->appState->getAreaCode() === Area::AREA_ADMINHTML
             ? $this->getConfigForAllStores($path)
             : $this->getConfigForCurrentStore($path);
         sort($result);

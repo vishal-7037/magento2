@@ -4,18 +4,13 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\SendFriend\Controller\Product;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\ObjectManager;
-use Magento\SendFriend\Model\CaptchaValidator;
 
-/**
- * Controller class Sendmail. Represents send-mail action request flow
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class Sendmail extends \Magento\SendFriend\Controller\Product
 {
     /**
@@ -29,11 +24,6 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
     protected $catalogSession;
 
     /**
-     * @var CaptchaValidator
-     */
-    private $captchaValidator;
-
-    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
@@ -41,9 +31,6 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param CaptchaValidator|null $captchaValidator
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -52,13 +39,11 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
         \Magento\SendFriend\Model\SendFriend $sendFriend,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Magento\Catalog\Model\Session $catalogSession,
-        CaptchaValidator $captchaValidator = null
+        \Magento\Catalog\Model\Session $catalogSession
     ) {
         parent::__construct($context, $coreRegistry, $formKeyValidator, $sendFriend, $productRepository);
         $this->categoryRepository = $categoryRepository;
         $this->catalogSession = $catalogSession;
-        $this->captchaValidator = $captchaValidator ?: ObjectManager::getInstance()->create(CaptchaValidator::class);
     }
 
     /**
@@ -106,7 +91,6 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
 
         try {
             $validate = $this->sendFriend->validate();
-            $this->captchaValidator->validateSending($this->getRequest());
             if ($validate === true) {
                 $this->sendFriend->send();
                 $this->messageManager->addSuccess(__('The link to a friend was sent.'));

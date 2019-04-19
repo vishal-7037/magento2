@@ -12,16 +12,14 @@ define([
     'Magento_Checkout/js/view/summary/abstract-total',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/totals',
-    'mage/translate',
-    'underscore'
-], function (ko, Component, quote, totals, $t, _) {
+    'jquery',
+    'mage/translate'
+], function (ko, Component, quote, totals, $, $t) {
     'use strict';
 
     var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal,
         isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed,
-        isZeroTaxDisplayed = window.checkoutConfig.isZeroTaxDisplayed,
-        taxAmount = 0,
-        rates = 0;
+        isZeroTaxDisplayed = window.checkoutConfig.isZeroTaxDisplayed;
 
     return Component.extend({
         defaults: {
@@ -69,7 +67,7 @@ define([
                 }
             }
 
-            return amount;
+            return parseFloat(amount);
         },
 
         /**
@@ -99,33 +97,6 @@ define([
          */
         formatPrice: function (amount) {
             return this.getFormattedPrice(amount);
-        },
-
-        /**
-         * @param {*} parent
-         * @param {*} percentage
-         * @return {*|String}
-         */
-        getTaxAmount: function (parent, percentage) {
-            var totalPercentage = 0;
-
-            taxAmount = parent.amount;
-            rates = parent.rates;
-            _.each(rates, function (rate) {
-                totalPercentage += parseFloat(rate.percent);
-            });
-
-            return this.getFormattedPrice(this.getPercentAmount(taxAmount, totalPercentage, percentage));
-        },
-
-        /**
-         * @param {*} amount
-         * @param {*} totalPercentage
-         * @param {*} percentage
-         * @return {*|String}
-         */
-        getPercentAmount: function (amount, totalPercentage, percentage) {
-            return parseFloat(amount * percentage / totalPercentage);
         },
 
         /**

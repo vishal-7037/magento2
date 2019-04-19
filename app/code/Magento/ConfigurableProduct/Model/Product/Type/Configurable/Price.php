@@ -7,15 +7,14 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
-use Magento\Catalog\Model\Product;
-
-/**
- * Class Price for configurable product
- */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
     /**
-     * @inheritdoc
+     * Get product final price
+     *
+     * @param   float $qty
+     * @param   \Magento\Catalog\Model\Product $product
+     * @return  float
      */
     public function getFinalPrice($qty, $product)
     {
@@ -23,10 +22,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             return $product->getCalculatedFinalPrice();
         }
         if ($product->getCustomOption('simple_product') && $product->getCustomOption('simple_product')->getProduct()) {
-            /** @var Product $simpleProduct */
-            $simpleProduct = $product->getCustomOption('simple_product')->getProduct();
-            $simpleProduct->setCustomerGroupId($product->getCustomerGroupId());
-            $finalPrice = parent::getFinalPrice($qty, $simpleProduct);
+            $finalPrice = parent::getFinalPrice($qty, $product->getCustomOption('simple_product')->getProduct());
         } else {
             $priceInfo = $product->getPriceInfo();
             $finalPrice = $priceInfo->getPrice('final_price')->getAmount()->getValue();
@@ -39,7 +35,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getPrice($product)
     {
@@ -52,7 +48,6 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                 }
             }
         }
-
         return 0;
     }
 }

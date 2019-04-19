@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\Locale;
 
-/**
- * Price locale format.
- */
 class Format implements \Magento\Framework\Locale\FormatInterface
 {
     /**
@@ -41,8 +38,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
     }
 
     /**
-     * Returns the first found number from a string.
-     *
+     * Returns the first found number from a string
      * Parsing depends on given locale (grouping and decimal)
      *
      * Examples for input:
@@ -104,7 +100,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
         }
 
         $formatter = new \NumberFormatter(
-            $currency->getCode() ? $localeCode . '@currency=' . $currency->getCode() : $localeCode,
+            $localeCode . '@currency=' . $currency->getCode(),
             \NumberFormatter::CURRENCY
         );
         $format = $formatter->getPattern();

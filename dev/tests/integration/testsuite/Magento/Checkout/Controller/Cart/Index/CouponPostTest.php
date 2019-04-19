@@ -28,14 +28,13 @@ class CouponPostTest extends \Magento\TestFramework\TestCase\AbstractController
             'remove' => 0,
             'coupon_code' => 'test'
         ];
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($inputData);
         $this->dispatch(
             'checkout/cart/couponPost/'
         );
 
         $this->assertSessionMessages(
-            $this->equalTo(['The coupon code &quot;test&quot; is not valid.']),
+            $this->equalTo(['The coupon code "test" is not valid.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
@@ -66,7 +65,7 @@ class CouponPostTest extends \Magento\TestFramework\TestCase\AbstractController
         );
 
         $this->assertSessionMessages(
-            $this->equalTo(['You used coupon code &quot;' . $couponCode . '&quot;.']),
+            $this->equalTo(['You used coupon code "' . $couponCode . '".']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }

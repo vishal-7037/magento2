@@ -196,13 +196,6 @@ class ConditionsElement extends SimpleElement
     protected $exception;
 
     /**
-     * Condition option text selector.
-     *
-     * @var string
-     */
-    private $conditionOptionTextSelector = '//option[normalize-space(text())="%s"]';
-
-    /**
      * @inheritdoc
      */
     public function setValue($value)
@@ -289,16 +282,10 @@ class ConditionsElement extends SimpleElement
         $count = 0;
 
         do {
+            $newCondition->find($this->addNew, Locator::SELECTOR_XPATH)->click();
+
             try {
-                $specificType = $newCondition->find(
-                    sprintf($this->conditionOptionTextSelector, $type),
-                    Locator::SELECTOR_XPATH
-                )->isPresent();
-                $newCondition->find($this->addNew, Locator::SELECTOR_XPATH)->click();
-                $condition = $specificType
-                    ? $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'selectcondition')
-                    : $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select');
-                $condition->setValue($type);
+                $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select')->setValue($type);
                 $isSetType = true;
             } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
                 $isSetType = false;

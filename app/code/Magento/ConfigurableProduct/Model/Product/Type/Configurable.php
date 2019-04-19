@@ -24,7 +24,6 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  * @since 100.0.2
  */
@@ -1386,7 +1385,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     private function getUsedProductsCacheKey($keyParts)
     {
-        return sha1(implode('_', $keyParts));
+        return md5(implode('_', $keyParts));
     }
 
     /**

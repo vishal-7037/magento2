@@ -15,8 +15,6 @@ use Magento\Framework\Locale\Format;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
- * Configurable product view type.
- *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
@@ -279,8 +277,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * Collect price options.
-     *
      * @return array
      */
     protected function getOptionPrices()
@@ -319,11 +315,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                         ),
                     ],
                     'tierPrices' => $tierPrices,
-                    'msrpPrice' => [
-                        'amount' => $this->localeFormat->getNumber(
-                            $product->getMsrp()
-                        ),
-                    ],
                  ];
         }
         return $prices;

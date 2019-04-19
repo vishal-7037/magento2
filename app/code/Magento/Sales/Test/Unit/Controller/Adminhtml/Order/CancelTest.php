@@ -74,12 +74,10 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             ['setRedirect', 'sendResponse']
         );
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->request->expects($this->any())->method('isPost')->willReturn(true);
+            ->disableOriginalConstructor()->getMock();
         $this->messageManager = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccessMessage', 'addErrorMessage']
+            ['addSuccess', 'addError']
         );
         $this->orderRepositoryMock = $this->getMockBuilder(\Magento\Sales\Api\OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
@@ -103,6 +101,8 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Controller\Adminhtml\Order\Cancel::class,
             [
                 'context' => $this->context,
+                'request' => $this->request,
+                'response' => $this->response,
                 'orderRepository' => $this->orderRepositoryMock
             ]
         );
@@ -117,7 +117,7 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             ->method('isPost')
             ->willReturn(false);
         $this->messageManager->expects($this->once())
-            ->method('addErrorMessage')
+            ->method('addError')
             ->with('You have not canceled the item.');
         $this->resultRedirect->expects($this->once())
             ->method('setPath')

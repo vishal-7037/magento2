@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Store\Model\Store;
 
 /**
  * Class ProductDataProvider
@@ -59,7 +58,6 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection = $collectionFactory->create();
         $this->addFieldStrategies = $addFieldStrategies;
         $this->addFilterStrategies = $addFilterStrategies;
-        $this->collection->setStoreId(Store::DEFAULT_STORE_ID);
     }
 
     /**

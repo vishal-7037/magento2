@@ -50,10 +50,6 @@ class Upload extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     public function execute()
     {
         try {
-            if (!$this->getRequest()->isPost()) {
-                throw new \Exception('Wrong request.');
-            }
-
             $this->_initAction();
             $path = $this->getStorage()->getSession()->getCurrentPath();
             if (!$this->directoryResolver->validatePath($path, DirectoryList::MEDIA)) {

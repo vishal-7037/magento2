@@ -7,9 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Controller\Product;
-
 use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
@@ -25,9 +23,6 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected $productRepository;
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -45,7 +40,6 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
         $product = $this->productRepository->get('simple_product_1');
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch(
             sprintf(
                 'catalog/product_compare/add/product/%s/form_key/%s?nocookie=1',
@@ -55,12 +49,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         );
 
         $this->assertSessionMessages(
-            $this->equalTo(
-                [
-                    'You added product Simple Product 1 Name to the '.
-                    '<a href="http://localhost/index.php/catalog/product_compare/">comparison list</a>.'
-                ]
-            ),
+            $this->equalTo(['You added product Simple Product 1 Name to the <a href="http://localhost/index.php/catalog/product_compare/">comparison list</a>.']),
             MessageInterface::TYPE_SUCCESS
         );
 
@@ -84,7 +73,6 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_requireVisitorWithTwoProducts();
         $product = $this->productRepository->get('simple_product_2');
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
 
         $this->assertSessionMessages(
@@ -101,7 +89,6 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_requireCustomerWithTwoProducts();
         $product = $this->productRepository->get('simple_product_1');
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
         $secondProduct = $this->productRepository->get('simple_product_2');
 
@@ -145,7 +132,6 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_requireVisitorWithTwoProducts();
 
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('catalog/product_compare/clear');
 
         $this->assertSessionMessages(
@@ -165,7 +151,6 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_prepareCompareListWithProductNameXss();
         $product = $this->productRepository->get('product-with-xss');
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId() . '?nocookie=1');
 
         $this->assertSessionMessages(
@@ -322,8 +307,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         // important
         $compareItems->setVisitorId(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                \Magento\Customer\Model\Visitor::class
-            )->getId()
+                \Magento\Customer\Model\Visitor::class)->getId()
         );
         $actualProductIds = [];
         foreach ($compareItems as $compareItem) {

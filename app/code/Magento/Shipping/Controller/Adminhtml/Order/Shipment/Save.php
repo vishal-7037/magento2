@@ -6,6 +6,7 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Magento\Backend\App\Action;
 use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
 
 /**
@@ -96,7 +97,7 @@ class Save extends \Magento\Backend\App\Action
         $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());
         $isPost = $this->getRequest()->isPost();
         if (!$formKeyIsValid || !$isPost) {
-            $this->messageManager->addErrorMessage(__('We can\'t save the shipment right now.'));
+            $this->messageManager->addError(__('We can\'t save the shipment right now.'));
             return $resultRedirect->setPath('sales/order/index');
         }
 
@@ -107,6 +108,7 @@ class Save extends \Magento\Backend\App\Action
         }
 
         $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
+
         $responseAjax = new \Magento\Framework\DataObject();
 
         try {
@@ -134,7 +136,7 @@ class Save extends \Magento\Backend\App\Action
                 ->validate($shipment, [QuantityValidator::class]);
 
             if ($validationResult->hasMessages()) {
-                $this->messageManager->addErrorMessage(
+                $this->messageManager->addError(
                     __("Shipment Document Validation Error(s):\n" . implode("\n", $validationResult->getMessages()))
                 );
                 $this->_redirect('*/*/new', ['order_id' => $this->getRequest()->getParam('order_id')]);
@@ -158,7 +160,7 @@ class Save extends \Magento\Backend\App\Action
             $shipmentCreatedMessage = __('The shipment has been created.');
             $labelCreatedMessage = __('You created the shipping label.');
 
-            $this->messageManager->addSuccessMessage(
+            $this->messageManager->addSuccess(
                 $isNeedCreateLabel ? $shipmentCreatedMessage . ' ' . $labelCreatedMessage : $shipmentCreatedMessage
             );
             $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getCommentText(true);
@@ -167,7 +169,7 @@ class Save extends \Magento\Backend\App\Action
                 $responseAjax->setError(true);
                 $responseAjax->setMessage($e->getMessage());
             } else {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 $this->_redirect('*/*/new', ['order_id' => $this->getRequest()->getParam('order_id')]);
             }
         } catch (\Exception $e) {
@@ -176,7 +178,7 @@ class Save extends \Magento\Backend\App\Action
                 $responseAjax->setError(true);
                 $responseAjax->setMessage(__('An error occurred while creating shipping label.'));
             } else {
-                $this->messageManager->addErrorMessage(__('Cannot save shipment.'));
+                $this->messageManager->addError(__('Cannot save shipment.'));
                 $this->_redirect('*/*/new', ['order_id' => $this->getRequest()->getParam('order_id')]);
             }
         }

@@ -25,6 +25,5 @@
 
     <rule ref="Squiz.Commenting.DocCommentAlignment"/>
     <rule ref="Squiz.Functions.GlobalFunction"/>
-    <rule ref="Squiz.Operators.ValidLogicalOperators"/>
     <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
 </ruleset>

@@ -5,14 +5,9 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
-use Magento\Eav\Api\Data\AttributeGroupExtensionInterface;
-use Magento\Eav\Api\Data\AttributeGroupInterface;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
- * Entity attribute group model.
- *
  * @api
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Entity\Attribute\Group setSortOrder(int $value)
@@ -24,17 +19,13 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method \Magento\Eav\Model\Entity\Attribute\Group setTabGroupCode(string $value)
  * @since 100.0.2
  */
-class Group extends AbstractExtensibleModel implements AttributeGroupInterface
+class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    \Magento\Eav\Api\Data\AttributeGroupInterface
 {
     /**
      * @var \Magento\Framework\Filter\Translit
      */
     private $translitFilter;
-
-    /**
-     * @var array
-     */
-    private $reservedSystemNames = [];
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -45,7 +36,6 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param array $reservedSystemNames
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -55,8 +45,7 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
         \Magento\Framework\Filter\Translit $translitFilter,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [],
-        array $reservedSystemNames = []
+        array $data = []
     ) {
         parent::__construct(
             $context,
@@ -68,11 +57,10 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
             $data
         );
         $this->translitFilter = $translitFilter;
-        $this->reservedSystemNames = $reservedSystemNames;
     }
 
     /**
-     * Resource initialization.
+     * Resource initialization
      *
      * @return void
      * @codeCoverageIgnore
@@ -83,7 +71,7 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
     }
 
     /**
-     * Checks if current attribute group exists.
+     * Checks if current attribute group exists
      *
      * @return bool
      * @codeCoverageIgnore
@@ -94,7 +82,7 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
     }
 
     /**
-     * Delete groups.
+     * Delete groups
      *
      * @return $this
      * @codeCoverageIgnore
@@ -105,7 +93,7 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
     }
 
     /**
-     * Processing object before save data.
+     * Processing object before save data
      *
      * @return $this
      */
@@ -122,20 +110,18 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
                     ),
                     '-'
                 );
-                $isReservedSystemName = in_array(strtolower($attributeGroupCode), $this->reservedSystemNames);
-                if (empty($attributeGroupCode) || $isReservedSystemName) {
+                if (empty($attributeGroupCode)) {
                     // in the following code md5 is not used for security purposes
-                    $attributeGroupCode = md5(strtolower($groupName));
+                    $attributeGroupCode = md5($groupName);
                 }
                 $this->setAttributeGroupCode($attributeGroupCode);
             }
         }
-
         return parent::beforeSave();
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @codeCoverageIgnoreStart
      */
     public function getAttributeGroupId()
@@ -144,7 +130,7 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAttributeGroupName()
     {
@@ -152,7 +138,7 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAttributeSetId()
     {
@@ -160,7 +146,7 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setAttributeGroupId($attributeGroupId)
     {
@@ -168,7 +154,7 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setAttributeGroupName($attributeGroupName)
     {
@@ -176,7 +162,7 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setAttributeSetId($attributeSetId)
     {
@@ -184,9 +170,9 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
-     * @return AttributeGroupExtensionInterface|null
+     * @return \Magento\Eav\Api\Data\AttributeGroupExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -194,13 +180,14 @@ class Group extends AbstractExtensibleModel implements AttributeGroupInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
-     * @param AttributeGroupExtensionInterface $extensionAttributes
+     * @param \Magento\Eav\Api\Data\AttributeGroupExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(AttributeGroupExtensionInterface $extensionAttributes)
-    {
+    public function setExtensionAttributes(
+        \Magento\Eav\Api\Data\AttributeGroupExtensionInterface $extensionAttributes
+    ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 
